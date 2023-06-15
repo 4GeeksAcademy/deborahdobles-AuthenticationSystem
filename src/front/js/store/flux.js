@@ -13,12 +13,47 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			],
+			auth: false
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
+			},
+
+			logout: () => {
+				console.log("logout")
+				setStore({auth: false})
+				localStorage.removeItem("token");
+
+			},
+
+			login: (email,password) => {
+				const requestOptions = {
+					method: "POST",
+					headers: {"Content-type": "application/json"},
+					body: JSON.stringify(
+					   {
+						"email":email,
+						"password":password
+					   } 
+					)
+				};
+				fetch("https://deborahdobles-curly-sniffle-44xr9gxrwjxf7vvw-3001.preview.app.github.dev/api/login", requestOptions)
+					.then(response => {
+						//  response.json()
+						 console.log(response.status)
+						 if(response.status == 200){
+							setStore({auth: true})
+						 }
+						 return response.json()
+					})
+
+					.then(data => {
+					localStorage.setItem("token", data.access_token);
+					 console.log(data)
+					});
 			},
 
 			getMessage: async () => {
