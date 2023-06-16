@@ -39,7 +39,7 @@ const Form = () => {
                             <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
                             <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" className="form-control" />
                         </div>
-                        <button type="submit" className="btn btn-primary">Login</button>
+                        <button type="submit" className="btn btn-warning">Login</button>
                     </form> 
                 }
             </div>
