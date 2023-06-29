@@ -1,51 +1,68 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import { Navigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 const Form = () => {
-    const [email, setEmail] = useState("")    
-    const [password, setPassword] = useState("")
-    const {actions, store} = useContext(Context)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { actions, store } = useContext(Context);
+  const navigate = useNavigate();
 
-    function sendData(e) {
-        e.preventDefault()
-        console.log("send data")
-        console.log(email, password)
-        actions.login(email, password)
-
-        // const requestOptions = {
-        //     method: "POST",
-        //     headers: {"Content-type": "application/json"},
-        //     body: JSON.stringify(
-        //        {
-        //         "email":email,
-        //         "password":password
-        //        } 
-        //     )
-        // };
-        // fetch("https://deborahdobles-curly-sniffle-44xr9gxrwjxf7vvw-3001.preview.app.github.dev/api/login", requestOptions)
-        //     .then(response => response.json())
-        //     .then(data => console.log(data));
+  useEffect(() => {
+    if (store.auth) {
+      navigate("/demo");
     }
-    return (
-        <>
-            <div>
-                { store.auth === true ? <Navigate to="/demo"/> :
-                    <form className="w-50 mx-auto" onSubmit={sendData}>
-                        <div className="mb-3">
-                            <label htmlFor="exampleInputEmail" className="form-label">Email Address</label>
-                            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-                            <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" className="form-control" />
-                        </div>
-                        <button type="submit" className="btn btn-warning">Login</button>
-                    </form> 
-                }
-            </div>
-        </>
-    )
+  }, [store.auth]);
 
+  function sendData(e) {
+    e.preventDefault();
+    console.log("send Data");
+    console.log(email, password);
+    actions.login(email, password);
+  }
+
+  return (
+    <>
+      {!store.auth &&
+        <form className="row g-3" onSubmit={sendData}>
+          <div className="col-md-6">
+            <label htmlFor="inputEmail4" className="form-label">
+              Email
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="form-control"
+              id="inputEmail4"
+            />
+          </div>
+          <div className="col-md-6">
+            <label htmlFor="inputPassword4" className="form-label">
+              Password
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="form-control"
+              id="inputPassword4"
+            />
+          </div>
+
+          <div className="col-12">
+            <button type="submit" className="btn btn-primary">
+              Sign in
+            </button>
+            <Link to="/demotwo" className="btn btn-success">
+              Sign up
+            </Link>
+          </div>
+        </form>
+      }
+    </>
+  );
 };
 
 export default Form;

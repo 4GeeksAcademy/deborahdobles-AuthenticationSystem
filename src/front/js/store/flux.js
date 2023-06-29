@@ -1,3 +1,4 @@
+const apiURL = "https://deborahdobles-curly-sniffle-44xr9gxrwjxf7vvw-3001.preview.app.github.dev"
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -22,39 +23,88 @@ const getState = ({ getStore, getActions, setStore }) => {
 				getActions().changeColor(0, "green");
 			},
 
-			logout: () => {
-				console.log("logout")
+			logout: () =>{
+				console.log('logout')
 				setStore({auth: false})
 				localStorage.removeItem("token");
 
 			},
 
-			login: (email,password) => {
-				const requestOptions = {
-					method: "POST",
-					headers: {"Content-type": "application/json"},
-					body: JSON.stringify(
-					   {
-						"email":email,
-						"password":password
-					   } 
-					)
-				};
-				fetch("https://deborahdobles-curly-sniffle-44xr9gxrwjxf7vvw-3001.preview.app.github.dev/api/login", requestOptions)
-					.then(response => {
-						//  response.json()
-						 console.log(response.status)
-						 if(response.status == 200){
-							setStore({auth: true})
-						 }
-						 return response.json()
-					})
+			login: (email, password) =>  {
+				const requestOptions ={
 
-					.then(data => {
-					localStorage.setItem("token", data.access_token);
-					 console.log(data)
-					});
+					method: 'POST',
+					headers: {'Content-Type': 'application/json'},
+					body: JSON.stringify (
+					  {
+						"email": email,
+						"password": password
+					  }
+					)
+					
+				  };
+				
+				  fetch(apiURL + '/api/login', requestOptions)
+				  .then(response => {
+					
+					// response.json()
+					console.log(response.status)
+					if( response.status == 200){
+						setStore({auth: true})
+
+					}
+					return response.json()
+				
+				})
+				  .then(data => {
+					localStorage.setItem("token",data.access_token)
+					console.log(data)
+					return data
+				  })
+
+
+				  .catch(error =>  console.error(error));
+				
+
 			},
+
+			signup: (email, password) => {
+				const requestOptions ={
+
+					method: 'POST',
+					headers: {'Content-Type': 'application/json'},
+					body: JSON.stringify (
+					  {
+						"email": email,
+						"password": password
+					  }
+					)
+					
+				  };
+				
+				  fetch(apiURL + '/api/signup', requestOptions)
+				  .then(response => {
+					
+					// response.json()
+					console.log(response.status)
+					if( response.status == 200){
+						console.log(response)
+					}
+					return response.json()
+				
+				})
+				  .then(data => {
+					console.log(data.msg)
+					return data.msg
+				  })
+
+
+				  .catch(error =>  console.error(error));
+			  },
+			  
+
+
+
 
 			getMessage: async () => {
 				try{
